@@ -12,7 +12,6 @@ namespace LibraryAppTests
             lib.AddBook("1984", 1);
             return lib;
         }
-
         // ---- Constructor ----
 
         [TestMethod]
@@ -133,10 +132,8 @@ namespace LibraryAppTests
         [TestMethod]
         public void NotExisting_Title()
         {
-            var lib = CreateDefaultLibrary(); // Dune: 3 példány
-            lib.BorrowBook("Dune");
-            lib.BorrowBook("Dune");
-            Assert.AreEqual(-1, lib.GetAvailableCopies("Dune"));
+            var lib = CreateDefaultLibrary();
+            Assert.AreEqual(-1, lib.GetAvailableCopies("asgd"));
         }
 
         // ---- IsAvailable ----
@@ -178,6 +175,22 @@ namespace LibraryAppTests
         // TODO: újonnan létrehozott, üres könyvtárban GetTotalBorrowed() nullát ad vissza
         // TODO: visszahozás után a kikölcsönzött darabszám helyesen csökken
 
+        [TestMethod]
+        public void GetTotalBorrowed_Created()
+        {
+            var lib = new Library("City Library232");
+            Assert.AreEqual(0, lib.GetTotalBorrowed());
+        }
+
+        [TestMethod]
+        public void GetTotalBorrowed_Decrease()
+        {
+            var lib = CreateDefaultLibrary();
+            lib.BorrowBook("Dune");
+            lib.ReturnBook("Dune");
+            Assert.AreEqual(0, lib.GetTotalBorrowed());
+        }
+
         // ---- RemoveBook ----
 
         [TestMethod]
@@ -190,5 +203,20 @@ namespace LibraryAppTests
         }
         // TODO: nem létező cím eltávolításakor false-t kell visszaadni
         // TODO: eltávolítás után a cím már nem érhető el, GetAvailableCopies -1-et ad vissza
+
+        [TestMethod]
+        public void RemoveBook_NotExistingTitle()
+        {
+            var lib = CreateDefaultLibrary();
+            Assert.IsFalse(lib.RemoveBook("asf"));
+        }
+
+        [TestMethod]
+        public void RemoveBook_NotAvialable()
+        {
+            var lib = CreateDefaultLibrary();
+            lib.RemoveBook("Dune");
+            Assert.AreEqual(-1, lib.GetAvailableCopies("Dune"));
+        }
     }
 }
