@@ -14,25 +14,52 @@ namespace LibraryApp
         // name nem lehet null vagy üres
         public Library(string name)
         {
-            throw new NotImplementedException();
+            if (name == null || name == "")
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                _name = name;
+            }
+
         }
 
         public string GetName()
         {
-            throw new NotImplementedException();
+            return _name;
         }
 
         // Minden példány egy külön bejegyzés — AddBook("Dune", 3) -> három "Dune" kerül a listába
         // copies >= 1
         public void AddBook(string title, int copies)
         {
-            throw new NotImplementedException();
+            if (copies >= 1)
+            {
+                for (int i = 0; i < copies; i++)
+                {
+                    _availableBooks.Add(title);
+                }
+            }
+            else
+            {
+                throw new ArgumentException();
+            }           
         }
 
         // Visszatér false-al ha nincs elérhető példány a megadott címből
         public bool BorrowBook(string title)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _availableBooks.Count(); i++)
+            {
+                if (_availableBooks[i] == title)
+                {
+                    _availableBooks.Remove(title);
+                    _borrowedBooks.Add(title);
+                    return true;
+                }
+            }
+            return false;
         }
 
         // Visszatér false-al ha nincs kikölcsönzött példány a megadott címből
