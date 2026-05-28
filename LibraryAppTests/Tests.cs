@@ -86,6 +86,14 @@ namespace LibraryAppTests
         // TODO: nem létező cím visszahozásakor false-t kell visszaadni
         // TODO: olyan könyv visszahozásakor, amelyből semmi sincs kikölcsönzve, false-t kell adni
 
+        [TestMethod]
+        public void ReturnBook_NotExists()
+        {
+            var lib = CreateDefaultLibrary();
+            bool result = lib.ReturnBook("Dune");
+            Assert.IsFalse(result);
+        }
+
         // ---- GetAvailableCopies ----
 
         [TestMethod]
