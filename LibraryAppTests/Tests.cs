@@ -72,6 +72,22 @@ namespace LibraryAppTests
         // TODO: nem létező cím esetén false-t kell visszaadni és nem dob kivételt
         // TODO: az összes példány kikölcsönzése után újabb kölcsönzés false-t ad vissza
 
+        [TestMethod]
+        public void BorrowBook_TitleNotExits()
+        {
+            var lib = CreateDefaultLibrary();
+            bool result = lib.BorrowBook("safgfsa");
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void BorrowBook_NoBorrow()
+        {
+            var lib = CreateDefaultLibrary();
+            bool result = lib.BorrowBook("1984");
+            Assert.IsFalse(lib.BorrowBook("1984"));
+        }
+
         // ---- ReturnBook ----
 
         [TestMethod]
@@ -87,7 +103,15 @@ namespace LibraryAppTests
         // TODO: olyan könyv visszahozásakor, amelyből semmi sincs kikölcsönzve, false-t kell adni
 
         [TestMethod]
-        public void ReturnBook_NotExists()
+        public void Return_NotExisting()
+        {
+            var lib = CreateDefaultLibrary();
+            bool result = lib.ReturnBook("jgungea");
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void Return_NotBorrowed()
         {
             var lib = CreateDefaultLibrary();
             bool result = lib.ReturnBook("Dune");
@@ -106,6 +130,15 @@ namespace LibraryAppTests
         }
         // TODO: nem létező cím esetén -1-et kell visszaadni
 
+        [TestMethod]
+        public void NotExisting_Title()
+        {
+            var lib = CreateDefaultLibrary(); // Dune: 3 példány
+            lib.BorrowBook("Dune");
+            lib.BorrowBook("Dune");
+            Assert.AreEqual(-1, lib.GetAvailableCopies("Dune"));
+        }
+
         // ---- IsAvailable ----
 
         [TestMethod]
@@ -116,6 +149,21 @@ namespace LibraryAppTests
         }
         // TODO: teljesen kikölcsönzött könyv esetén false-t kell visszaadni
         // TODO: nem létező cím esetén false-t kell visszaadni
+
+        [TestMethod]
+        public void IsAvailable_Everything()
+        {
+            var lib = CreateDefaultLibrary();
+            lib.BorrowBook("1984");
+            Assert.IsFalse(lib.IsAvailable("1984"));
+        }
+
+        [TestMethod]
+        public void IsAvailable_NotExisting()
+        {
+            var lib = CreateDefaultLibrary();
+            Assert.IsFalse(lib.IsAvailable("valami"));
+        }
 
         // ---- GetTotalBorrowed ----
 
