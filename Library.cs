@@ -23,6 +23,8 @@ namespace LibraryApp
                 _name = name;
             }
 
+            _availableBooks = new List<string>();
+            _borrowedBooks = new List<string>();
         }
 
         public string GetName()
@@ -65,13 +67,39 @@ namespace LibraryApp
         // Visszatér false-al ha nincs kikölcsönzött példány a megadott címből
         public bool ReturnBook(string title)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _borrowedBooks.Count(); i++)
+            {
+                if (_borrowedBooks[i] == title)
+                {
+                    _borrowedBooks.Remove(title);
+                    _availableBooks.Add(title);
+                    return true;
+                }
+            }
+            return false;
         }
 
         // Az _availableBooks listában szereplő példányok számát adja vissza — -1 ha a cím nem szerepel
         public int GetAvailableCopies(string title)
         {
-            throw new NotImplementedException();
+            int count = 0;
+
+            for (int i = 0; i < _availableBooks.Count(); i++)
+            {
+                if (_availableBooks[i] == title)
+                {
+                    count++;
+                }
+            }
+
+            if (count != 0)
+            {
+                return count;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         // Visszatér true-val ha legalább egy szabad példány elérhető
